@@ -1,54 +1,5 @@
 (function () {
 
-    var updateTime = 1000 / 60;
-    var Animation = function (ele) {
-        this.ele = ele;
-        this.arr = [];
-        if (this.ele.indexOf('#') === 0) {
-            this.arr.push(document.getElementById(this.ele.slice(1)))
-        } else if (this.ele.indexOf('.') === 0) {
-            var classDom = document.getElementsByClassName(this.ele);
-            for (var i = 0; i < classDom.length; i++) {
-                this.arr.push(classDom[i])
-            }
-        } else {
-            var dom = document.getElementsByTagName(this.ele);
-            for (var j = 0; j < dom.length; j++) {
-                this.arr.push(dom[j])
-            }
-        }
-    };
-
-
-    window.Animation = Animation;
-    var request = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame||function (fn) {
-            setTimeout(fn,updateTime)
-        },
-    _fn = Animation.prototype;
-    _fn.each = function (fn) {
-        for (var i = 0; i < this.arr.length; i++) {
-            fn.call(this, this.arr[i])
-        }
-        return this;
-    };
-    _fn.setStyle = function (name, value) {
-        this.each(function (el) {
-            el.style[name] = value;
-        });
-        return this;
-    };
-    _fn.event = function (ev, fn) {
-        ev = ev || window.onload;
-        this.each(function (el) {
-            el.addEventListener(ev, function () {
-                fn.call(this)
-            })
-        });
-        return this;
-    };
-
-
     var pow = Math.pow,
         sqrt = Math.sqrt,
         sin = Math.sin,
@@ -60,20 +11,6 @@
         c4 = (2 * PI) / 3,
         c5 = (2 * PI) / 4.5;
 
-
-    function bounceOut(x) {
-        var n1 = 7.5625,
-            d1 = 2.75;
-        if (x < 1 / d1) {
-            return n1 * x * x;
-        } else if (x < 2 / d1) {
-            return n1 * (x -= (1.5 / d1)) * x + .75;
-        } else if (x < 2.5 / d1) {
-            return n1 * (x -= (2.25 / d1)) * x + .9375;
-        } else {
-            return n1 * (x -= (2.625 / d1)) * x + .984375;
-        }
-    }
 
     easing = {
         easeInQuad: function (x) {
@@ -186,26 +123,137 @@
         }
     };
 
-    _fn.move = function () {
+    function parameter(obj) {
+        var a, b, c, d;
+        for (var i = 0; i < obj.arguments.length; i++) {
+            if (typeof obj.arguments[i] === "object") {
+                a = obj.arguments[i]
+            }
+            else if (typeof obj.arguments[i] === "number") {
+                b = obj.arguments[i]
+            }
+            else if (typeof obj.arguments[i] === "function") {
+                c = obj.arguments[i]
+            }
+            else if (typeof obj.arguments[i] === "string") {
+                d = obj.arguments[i]
+            }
+        }
+        return {
+            ease: d,
+            distance: a,
+            time: b,
+            callback: c
+        }
+    }
+
+    var updateTime = 1000 / 60;
+
+
+    var v = function () {
+        _this = v;
+        console.log(_this.arguments);
+        var g = parameter(_this);
+        ease = g.ease || 'easeInQuad';
+        time = g.time || 500;
+        distance = g.distance || [100, 200];
+        var start = distance[0], end = distance[1];
+        var fn = g.callback;
+        var changeValue = end - start;
+        var updateCount = time / updateTime;
+        var a = 0, b = 1, c = b / updateCount, temp = 0;
+        pixel = a;
+
+        function step() {
+            console.log(changeValue * easing[ease](pixel));
+            temp = start + changeValue * easing[ease](pixel);
+            pixel += c;
+            if (start > end ? temp >= end : temp <= end) {
+                request(step)
+            }
+            fn(temp);
+        }
+
+        request(step);
+    };
+
+    window._v = v;
+
+    var Animation = function (ele) {
+        this.ele = ele;
+        this.arr = [];
+        if (this.ele.indexOf('#') === 0) {
+            this.arr.push(document.getElementById(this.ele.slice(1)))
+        } else if (this.ele.indexOf('.') === 0) {
+            var classDom = document.getElementsByClassName(this.ele);
+            for (var i = 0; i < classDom.length; i++) {
+                this.arr.push(classDom[i])
+            }
+        } else {
+            var dom = document.getElementsByTagName(this.ele);
+            for (var j = 0; j < dom.length; j++) {
+                this.arr.push(dom[j])
+            }
+        }
+    };
+
+
+    window.Animation = Animation;
+    var request = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
+            setTimeout(fn, updateTime)
+        },
+        _fn = Animation.prototype;
+    _fn.each = function (fn) {
+        for (var i = 0; i < this.arr.length; i++) {
+            fn.call(this, this.arr[i])
+        }
+        return this;
+    };
+    _fn.basicStyle = function () {
         this.each(function (el) {
-            var ease, distance, time, callback;
-            for (var i = 0; i < this.move.arguments.length; i++) {
-                if (typeof this.move.arguments[i] === "object") {
-                    distance = this.move.arguments[i]
-                }
-                else if (typeof this.move.arguments[i] === "number") {
-                    time = this.move.arguments[i]
-                }
-                else if (typeof this.move.arguments[i] === "function") {
-                    callback = this.move.arguments[i]
-                }
-                else if (typeof this.move.arguments[i] === "string") {
-                    ease = this.move.arguments[i]
+            var g = parameter(this.basicStyle);
+            ease = g.ease || 'easeInQuad';
+            time = g.time || 300;
+            distance = g.distance || ['width', 100, 300];
+            var name = distance[0], start = distance[1], end = distance[2];
+            var changeValue = end - start;
+            var updateCount = time / updateTime;
+            var a = 0, b = 1, c = b / updateCount, temp;
+            var pixel = a;
+
+            function step() {
+                temp = start + changeValue * easing[ease](pixel);
+                el.style[name] = temp + 'px';
+                pixel += c;
+                if (end > start ? temp < end : temp > end) {
+                    request(step)
+                } else {
+                    setTimeout(g.callback, 0)
                 }
             }
-            ease = ease || 'easeInQuad';
-            distance = distance || [0, 500, 0];
-            time = time || 500;
+
+            request(step);
+        });
+        return this;
+    };
+    _fn.event = function (ev, fn) {
+        ev = ev || window.onload;
+        this.each(function (el) {
+            el.addEventListener(ev, function () {
+                fn.call(this)
+            })
+        });
+        return this;
+    };
+
+
+    _fn.move = function () {
+        this.each(function (el) {
+            var g = parameter(this.move);
+            ease = g.ease || 'easeInQuad';
+            distance = g.distance || [0, 500, 0];
+            time = g.time || 500;
             var start = distance[0], end = distance[1], direction = distance[2] || 0;
             var changeValue = end - start;
             var updateCount = time / updateTime;
@@ -220,7 +268,7 @@
                     if (pixel < b) {
                         request(step)
                     } else {
-                        setTimeout(callback, 0)
+                        setTimeout(g.callback, 0)
                     }
                 } else if (direction === 1) {
                     temp = start + changeValue * easing[ease](pixel);
@@ -229,7 +277,7 @@
                     if (pixel < b) {
                         request(step)
                     } else {
-                        setTimeout(callback, 0)
+                        setTimeout(g.callback, 0)
                     }
                 }
             }
@@ -240,27 +288,12 @@
     };
     _fn.changeOpacity = function () {
         this.each(function (el) {
-            var distance, ease, time, callback;
-            for (var i = 0; i < this.changeOpacity.arguments.length; i++) {
-                if (typeof this.changeOpacity.arguments[i] === "object") {
-                    distance = this.changeOpacity.arguments[i]
-                }
-                else if (typeof this.changeOpacity.arguments[i] === "number") {
-                    time = this.changeOpacity.arguments[i]
-                }
-                else if (typeof this.changeOpacity.arguments[i] === "function") {
-                    callback = this.changeOpacity.arguments[i]
-                }
-                else if (typeof this.changeOpacity.arguments[i] === "string") {
-                    ease = this.changeOpacity.arguments[i]
-                }
-            }
-            ease = ease || 'easeInQuad';
-            distance = distance || [0, 100,'yes'];
-            time = time || 500;
-            var start = distance[0], end = distance[1],hide = distance[2]||'yes';
+            var g = parameter(this.changeOpacity);
+            ease = g.ease || 'easeInQuad';
+            distance = g.distance || [0, 100, 'yes'];
+            time = g.time || 500;
+            var start = distance[0], end = distance[1], hide = distance[2] || 'yes';
             var changeValue = end - start;
-            var updateTime = 1000 / 60;
             var updateCount = time / updateTime;
             var a = 0, b = 1, c = b / updateCount, temp;
             var pixel = a;
@@ -269,13 +302,13 @@
                 temp = start + changeValue * easing[ease](pixel);
                 el.style.opacity = temp / 100;
                 pixel += c;
-                if (temp<0.01&&hide==='yes'){
+                if (temp < 0.01 && hide === 'yes') {
                     el.style.display = 'none';
                 }
-                if (start>end?temp>=end:temp<=end) {
+                if (start > end ? temp >= end : temp <= end) {
                     request(step)
                 } else {
-                    setTimeout(callback, 0)
+                    setTimeout(g.callback, 0)
                 }
             }
 
@@ -283,5 +316,19 @@
 
         });
         return this
+    };
+
+    function bounceOut(x) {
+        var n1 = 7.5625,
+            d1 = 2.75;
+        if (x < 1 / d1) {
+            return n1 * x * x;
+        } else if (x < 2 / d1) {
+            return n1 * (x -= (1.5 / d1)) * x + .75;
+        } else if (x < 2.5 / d1) {
+            return n1 * (x -= (2.25 / d1)) * x + .9375;
+        } else {
+            return n1 * (x -= (2.625 / d1)) * x + .984375;
+        }
     }
 })();
