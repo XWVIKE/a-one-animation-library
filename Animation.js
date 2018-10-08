@@ -150,10 +150,13 @@
     var updateTime = 1000 / 60;
 
 
-    var v = function () {
-        _this = v;
-        console.log(_this.arguments);
-        var g = parameter(_this);
+    var Customize = function () {
+    };
+
+    window.c = new Customize;
+    _c = Customize.prototype;
+    _c.c = function () {
+        var g = parameter(this.c);
         ease = g.ease || 'easeInQuad';
         time = g.time || 500;
         distance = g.distance || [100, 200];
@@ -165,8 +168,10 @@
         pixel = a;
 
         function step() {
-            console.log(changeValue * easing[ease](pixel));
-            temp = start + changeValue * easing[ease](pixel);
+            temp = Math.floor(start + changeValue * easing[ease](pixel));
+            if (temp >= end) {
+                temp = end;
+            }
             pixel += c;
             if (start > end ? temp >= end : temp <= end) {
                 request(step)
@@ -176,8 +181,6 @@
 
         request(step);
     };
-
-    window._v = v;
 
     var Animation = function (ele) {
         this.ele = ele;
@@ -223,7 +226,10 @@
             var pixel = a;
 
             function step() {
-                temp = start + changeValue * easing[ease](pixel);
+                temp = Math.floor(start + changeValue * easing[ease](pixel));
+                if (temp >= end) {
+                    temp = end;
+                }
                 el.style[name] = temp + 'px';
                 pixel += c;
                 if (end > start ? temp < end : temp > end) {
@@ -262,7 +268,10 @@
 
             function step() {
                 if (direction === 0) {
-                    temp = start + changeValue * easing[ease](pixel);
+                    temp = Math.floor(start + changeValue * easing[ease](pixel));
+                    if (temp >= end) {
+                        temp = end;
+                    }
                     el.style.left = temp + 'px';
                     pixel += c;
                     if (pixel < b) {
@@ -271,7 +280,10 @@
                         setTimeout(g.callback, 0)
                     }
                 } else if (direction === 1) {
-                    temp = start + changeValue * easing[ease](pixel);
+                    temp = Math.floor(start + changeValue * easing[ease](pixel));
+                    if (temp >= end) {
+                        temp = end;
+                    }
                     el.style.top = temp + 'px';
                     pixel += c;
                     if (pixel < b) {
@@ -299,7 +311,10 @@
             var pixel = a;
 
             function step() {
-                temp = start + changeValue * easing[ease](pixel);
+                temp = Math.floor(start + changeValue * easing[ease](pixel));
+                if (temp >= end) {
+                    temp = end;
+                }
                 el.style.opacity = temp / 100;
                 pixel += c;
                 if (temp < 0.01 && hide === 'yes') {
@@ -331,4 +346,5 @@
             return n1 * (x -= (2.625 / d1)) * x + .984375;
         }
     }
+
 })();
