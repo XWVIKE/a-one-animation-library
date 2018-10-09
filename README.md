@@ -74,20 +74,12 @@ c.c([100,200],1000,'easeInQuad',function(x){
 ---
 ### 缓动函数速查表：
 ![缓动函数表](https://github.com/XWVIKE/a-one-animation-library/blob/master/img/1.png '缓动函数图片')
-[缓动函数速查表](https://easings.net/zh-cn)
+[缓动函数速查表](https://easings.net/zh-cn)  
+
+
+# 大量使用基于dom的动画操作会十分影响页面性能。并且违背当前的前端开发理念。
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+该库目前还有一些问题没有解决。不过基本不影响使用。作者会继续进行优化和改进。
