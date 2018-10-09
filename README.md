@@ -1,7 +1,7 @@
 # README
 
 # A one Animation library<br>
-|author|xwvike|
+|Author|xwvike|
 |---|---|
 |E-mail|xwvike@gmail.com|
 <br>
@@ -52,7 +52,9 @@ changeOpacity()方法可以为所有元素提供渐隐和渐显的动画效果�
 >一个表示动画使用什么样的缓动函数的文本参数，类型为string。默认值是：easeInQuad。<br>
 >一个回调函数。表示动画结束后执行的动作。<br>
 #### Animation.event()方法。
+event()方法可以为对象添加事件函数。旨在解决浏览器兼容事件延迟执行以及为对象提供链式动画操作的目的。不过目前该方法并未完善，仅仅只是提供了window.addEventListener()方法一样的功能。可以传入一个事件名称，和一个函数。<br>
 
+---
 
 
 
