@@ -122,6 +122,10 @@
                 (1 + bounceOut(2 * x - 1)) / 2;
         }
     };
+    var request = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
+            setTimeout(fn, updateTime)
+        };
 
     function parameter(obj) {
         var a, b, c, d;
@@ -147,7 +151,7 @@
         }
     }
 
-    var updateTime = 1000 / 60;
+    var updateTime = 16;
 
 
     var Customize = function () {
@@ -163,17 +167,14 @@
         var start = distance[0], end = distance[1];
         var fn = g.callback;
         var changeValue = end - start;
-        var updateCount = time / updateTime;
-        var a = 0, b = 1, c = b / updateCount, temp = 0;
-        pixel = a;
+        var updateCount = Math.round(time / updateTime);
+        var b = 1, c = b / updateCount, temp = 0;
+        pixel = 0;
 
         function step() {
-            temp = Math.floor(start + changeValue * easing[ease](pixel));
-            if (temp >= end) {
-                temp = end;
-            }
+            temp = start + changeValue * easing[ease](pixel);
             pixel += c;
-            if (start > end ? temp >= end : temp <= end) {
+            if (pixel < b) {
                 request(step)
             }
             fn(temp);
@@ -202,10 +203,7 @@
 
 
     window.Animation = Animation;
-    var request = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
-            setTimeout(fn, updateTime)
-        },
+
         _fn = Animation.prototype;
     _fn.each = function (fn) {
         for (var i = 0; i < this.arr.length; i++) {
@@ -221,18 +219,15 @@
             distance = g.distance || ['width', 100, 300];
             var name = distance[0], start = distance[1], end = distance[2];
             var changeValue = end - start;
-            var updateCount = time / updateTime;
-            var a = 0, b = 1, c = b / updateCount, temp;
-            var pixel = a;
+            var updateCount = Math.round(time / updateTime);
+            var b = 1, c = b / updateCount, temp = 0;
+            var pixel = 0;
 
             function step() {
-                temp = Math.floor(start + changeValue * easing[ease](pixel));
-                if (temp >= end) {
-                    temp = end;
-                }
+                temp = start + changeValue * easing[ease](pixel);
                 el.style[name] = temp + 'px';
                 pixel += c;
-                if (end > start ? temp < end : temp > end) {
+                if (pixel <b) {
                     request(step)
                 } else {
                     setTimeout(g.callback, 0)
@@ -262,16 +257,13 @@
             time = g.time || 500;
             var start = distance[0], end = distance[1], direction = distance[2] || 0;
             var changeValue = end - start;
-            var updateCount = time / updateTime;
-            var a = 0, b = 1, c = b / updateCount, temp;
-            var pixel = a;
+            var updateCount = Math.round(time / updateTime);
+            var b = 1, c = b / updateCount, temp = 0;
+            var pixel = 0;
 
             function step() {
                 if (direction === 0) {
-                    temp = Math.floor(start + changeValue * easing[ease](pixel));
-                    if (temp >= end) {
-                        temp = end;
-                    }
+                    temp = start + changeValue * easing[ease](pixel);
                     el.style.left = temp + 'px';
                     pixel += c;
                     if (pixel < b) {
@@ -281,12 +273,9 @@
                     }
                 } else if (direction === 1) {
                     temp = Math.floor(start + changeValue * easing[ease](pixel));
-                    if (temp >= end) {
-                        temp = end;
-                    }
                     el.style.top = temp + 'px';
                     pixel += c;
-                    if (pixel < b) {
+                    if (pixel < c) {
                         request(step)
                     } else {
                         setTimeout(g.callback, 0)
@@ -304,23 +293,20 @@
             ease = g.ease || 'easeInQuad';
             distance = g.distance || [0, 100, 'yes'];
             time = g.time || 500;
-            var start = distance[0], end = distance[1], hide = distance[2] || 'yes';
+            var start = distance[0], end = distance[1], hide = distance[2] || 'no';
             var changeValue = end - start;
-            var updateCount = time / updateTime;
-            var a = 0, b = 1, c = b / updateCount, temp;
-            var pixel = a;
+            var updateCount = Math.round(time / updateTime);
+            var b = 1, c = b / updateCount, temp = 0;
+            var pixel = 0;
 
             function step() {
-                temp = Math.floor(start + changeValue * easing[ease](pixel));
-                if (temp >= end) {
-                    temp = end;
-                }
+                temp = start + changeValue * easing[ease](pixel);
                 el.style.opacity = temp / 100;
                 pixel += c;
-                if (temp < 0.01 && hide === 'yes') {
+                if (pixel>=c && hide === 'yes') {
                     el.style.display = 'none';
                 }
-                if (start > end ? temp >= end : temp <= end) {
+                if (pixel<b) {
                     request(step)
                 } else {
                     setTimeout(g.callback, 0)
