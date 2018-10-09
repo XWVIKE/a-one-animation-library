@@ -23,16 +23,16 @@ newAnimation.move([0,100],1000,'easeOutBounce')
 进阶使用方法：
 ```
 const a = new Animation('#a');
-a.move([0,100],1000,'easeOutBouce').basiStyle(['width',100,300],1000,function(){
+a.move([0,100],1000,'easeOutBouce').basicStyle(['width',100,300],1000,function(){
     a.changeOpacity([100,20],1000)
-}).basiStyle(['fontSize',12,20],1000)
+}).basicStyle(['fontSize',12,20],1000)
 ```
 上述示例展示了如何使用回调函数和链式操作进行一系列的动画。AOAL的链式操作意味着，该对象可以同时执行将其串联起来的动画。回调函数则意味着，在上个动画执行完毕后，就进行回调函数中的内容。函数中可以进行任意操作。
 <br>
 <br>
 <br>
 ### Animation对象目前提供了四个方法。分别是：
-#### Animation.basiStyle()方法。<br>
+#### Animation.basicStyle()方法。<br>
 basiStyle()方法可以为所有基于像素变化的样式提供动画，例如元素宽度、高度、边框粗细、圆角、甚至可以代替move()方法。不过不建议使用。<br>
 该方法可以传入四个参数，分别是：<br>
 >一个表示需要添加动画的css名称，以及起始位置和结束位置。数组默认值是：['width',100,300]。<br>
