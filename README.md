@@ -71,7 +71,7 @@ c.c([100,200],1000,'easeInQuad',function(x){
 >一个函数，并且该函数需要传入一个参数，比如x。因为在函数里执行的所有样式变化都是基于这个参数的变化进行的。<br>
 ---
 ### 缓动函数速查表：
-![缓动函数表](https://github.com/XWVIKE/a-one-animation-library/blob/master/img/1.png '缓动函数图片')
+![缓动函数表](http://www.xwvike.com/homepage/img/1.png '缓动函数图片')
 [缓动函数速查表](https://easings.net/zh-cn)  
 # 大量使用基于dom的动画操作会十分影响页面性能。并且违背当前的前端开发理念。<br>
 该库目前还有一些问题没有解决。不过基本不影响使用。作者会继续进行优化和改进。
