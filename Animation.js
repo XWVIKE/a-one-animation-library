@@ -204,7 +204,7 @@
 
     window.Animation = Animation;
 
-        _fn = Animation.prototype;
+    _fn = Animation.prototype;
     _fn.each = function (fn) {
         for (var i = 0; i < this.arr.length; i++) {
             fn.call(this, this.arr[i])
@@ -227,7 +227,7 @@
                 temp = start + changeValue * easing[ease](pixel);
                 el.style[name] = temp + 'px';
                 pixel += c;
-                if (pixel <b) {
+                if (pixel < b) {
                     request(step)
                 } else {
                     setTimeout(g.callback, 0)
@@ -275,7 +275,7 @@
                     temp = Math.floor(start + changeValue * easing[ease](pixel));
                     el.style.top = temp + 'px';
                     pixel += c;
-                    if (pixel < c) {
+                    if (pixel < b) {
                         request(step)
                     } else {
                         setTimeout(g.callback, 0)
@@ -303,10 +303,10 @@
                 temp = start + changeValue * easing[ease](pixel);
                 el.style.opacity = temp / 100;
                 pixel += c;
-                if (pixel>=c && hide === 'yes') {
+                if (pixel >= c && hide === 'yes') {
                     el.style.display = 'none';
                 }
-                if (pixel<b) {
+                if (pixel < b) {
                     request(step)
                 } else {
                     setTimeout(g.callback, 0)
